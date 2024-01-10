@@ -13,6 +13,8 @@ public class GazeReticle : MonoBehaviour
     private GameObject indicator;
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
+    private Camera arCamera;
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,20 +25,19 @@ public class GazeReticle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var ray = new Vector2(Screen.width / 2, Screen.height / 2);
+        var center = new Vector2(Screen.width / 2, Screen.height / 2);
+        Ray ray = arCamera.ScreenPointToRay(center);
+        RaycastHit hit;
 
-        if(raycastManager.Raycast(ray, hits, TrackableType.Planes))
+        if (Physics.Raycast(ray, out hit))
         {
-            Pose hitpose = hits[0].pose;
 
-            transform.position = hitpose.position;
 
-            transform.rotation = hitpose.rotation;
+      
 
-            if (!indicator.activeInHierarchy)
-            {
-                indicator.SetActive(true); 
-            }
+            indicator.transform.position = hit.point;
+
+           
         }
     }
 }
